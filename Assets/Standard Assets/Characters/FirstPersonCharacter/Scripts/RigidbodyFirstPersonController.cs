@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using System.Collections;
 
 namespace UnityStandardAssets.Characters.FirstPerson
 {
@@ -138,6 +139,22 @@ namespace UnityStandardAssets.Characters.FirstPerson
         	movementSettings.JumpForce = jumpForce * m_RigidBody.velocity.magnitude ;
         	m_Jump = true;
         }
+        
+        public void Wipeout(float duration){
+        	
+        	StartCoroutine(StopMoving(duration));
+        }
+        
+        IEnumerator StopMoving(float duration){
+        	float oldSpeed = 0.0F;
+        	if(movementSettings.ForwardSpeed < float.Epsilon){
+        		oldSpeed = movementSettings.ForwardSpeed;
+        		movementSettings.ForwardSpeed = 0.0F;
+        		
+				yield return new WaitForSeconds(duration);
+				movementSettings.ForwardSpeed = oldSpeed;
+        	}
+        }
 
 
         private void FixedUpdate()
@@ -167,6 +184,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
                 if (m_Jump)
                 {
+                	Debug.Log("Jumping! " + movementSettings.JumpForce);
                     m_RigidBody.drag = 0f;
                     m_RigidBody.velocity = new Vector3(m_RigidBody.velocity.x, 0f, m_RigidBody.velocity.z);
                     m_RigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
@@ -262,6 +280,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             if (!m_PreviouslyGrounded && m_IsGrounded && m_Jumping)
             {
+            	Debug.Log("Done Jumping");
                 m_Jumping = false;
             }
         }
