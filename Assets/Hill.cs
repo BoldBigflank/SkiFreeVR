@@ -15,6 +15,7 @@ public class Hill : MonoBehaviour {
 	
 	// Objects to place
 	public GameObject[] obstacles;
+	public int obstacleCount = 25;
 	
 	// Use this for initialization
 	void Start () {
@@ -27,14 +28,28 @@ public class Hill : MonoBehaviour {
 				o.transform.localScale = new Vector3(floorWidth, floorHeight, 1.0F);
 				o.transform.parent = floorParent.transform;
 				
-				if( obstacles.Length > 0 ){
-					GameObject obs = Instantiate ( obstacles[0] , new Vector3(x * floorWidth, 0.0F, y * floorHeight), obstacles[0].transform.rotation) as GameObject;
-					obs.transform.parent = floorParent.transform;
-				} 
+//				if( obstacles.Length > 0 ){
+//					GameObject obs = Instantiate ( obstacles[0] , new Vector3(x * floorWidth, 0.0F, y * floorHeight), obstacles[0].transform.rotation) as GameObject;
+//					obs.transform.parent = floorParent.transform;
+//				} 
 			}
 
 		}
-		floorParent.transform.rotation = Quaternion.Euler (Vector3.left * (-1)*floorAngle);
+		GameObject obstaclesParent = new GameObject();
+		obstaclesParent.name = "Obstacles";
+		obstaclesParent.transform.parent = transform;
+		for( int i = 0; i < obstacleCount; i++){
+			int obstacleNumber = Random.Range(0,obstacles.Length);
+			float xPos = Random.Range (0.0F, columns * floorWidth) - floorWidth / 2.0F;
+			float yPos = Random.Range (0.0F, rows * floorWidth) - floorHeight / 2.0F;
+			
+			GameObject obs = Instantiate ( obstacles[obstacleNumber] , new Vector3(xPos, 0.0F, yPos), obstacles[obstacleNumber].transform.rotation) as GameObject;
+			obs.transform.parent = obstaclesParent.transform;
+			obs.transform.localRotation = Quaternion.Euler (Vector3.left * floorAngle);
+			
+		}
+		transform.position = new Vector3(columns * floorWidth/-2.0F , 0.0F, 0.0F);
+		transform.rotation = Quaternion.Euler (Vector3.left * (-1)*floorAngle);
 	}
 	
 	// Update is called once per frame

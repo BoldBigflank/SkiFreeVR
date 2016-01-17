@@ -17,7 +17,6 @@ public class Jump : MonoBehaviour {
 	
 	void OnTriggerStay(Collider other){
 		if(other.CompareTag("Player")){
-			Debug.Log ("Player TRIGGERED");
 //			other.attachedRigidbody.AddForce(0.0F, strength, 0.0F, ForceMode.Impulse);
 			other.gameObject.GetComponent<RigidbodyFirstPersonController>().Jump(strength);
 		}

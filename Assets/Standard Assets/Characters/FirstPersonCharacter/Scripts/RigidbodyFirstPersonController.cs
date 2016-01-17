@@ -18,6 +18,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             public float RunMultiplier = 2.0f;   // Speed when sprinting
 	        public KeyCode RunKey = KeyCode.LeftShift;
             public float JumpForce = 30f;
+            public bool wipedOut = false;
             public AnimationCurve SlopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
             [HideInInspector] public float CurrentTargetSpeed = 8f;
 
@@ -42,7 +43,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				{
 					//forwards
 					//handled last as if strafing and moving forward at the same time forwards speed should take precedence
-					CurrentTargetSpeed = ForwardSpeed;
+					CurrentTargetSpeed = ForwardSpeed * input.y;
 				}
 #if !MOBILE_INPUT
 	            if (Input.GetKey(RunKey))
@@ -141,18 +142,19 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
         
         public void Wipeout(float duration){
-        	
+        	Debug.Log ("WIPEOUT");
         	StartCoroutine(StopMoving(duration));
         }
         
         IEnumerator StopMoving(float duration){
         	float oldSpeed = 0.0F;
-        	if(movementSettings.ForwardSpeed < float.Epsilon){
-        		oldSpeed = movementSettings.ForwardSpeed;
-        		movementSettings.ForwardSpeed = 0.0F;
+        	if(!movementSettings.wipedOut){
+				Debug.Log ("Stopping" + movementSettings.ForwardSpeed);
+        		movementSettings.wipedOut = true;
         		
 				yield return new WaitForSeconds(duration);
-				movementSettings.ForwardSpeed = oldSpeed;
+				movementSettings.wipedOut = false;
+				Debug.Log ("STARTING AGAIN");
         	}
         }
 
@@ -184,7 +186,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
                 if (m_Jump)
                 {
-                	Debug.Log("Jumping! " + movementSettings.JumpForce);
                     m_RigidBody.drag = 0f;
                     m_RigidBody.velocity = new Vector3(m_RigidBody.velocity.x, 0f, m_RigidBody.velocity.z);
                     m_RigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
@@ -237,7 +238,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     x = CrossPlatformInputManager.GetAxis("Horizontal"),
 					y = Mathf.Clamp( Mathf.Cos (  Mathf.Deg2Rad * (cam.transform.rotation.eulerAngles.y)), 0.0F, 1.0F )
                 };
-//			Debug.Log (Mathf.Clamp( Mathf.Cos (Mathf.Deg2Rad * (cam.transform.rotation.eulerAngles.y )), 0.0F, 1.0F ));
+            if(movementSettings.wipedOut) input.y = 0.0F;
 			movementSettings.UpdateDesiredTargetSpeed(input);
             return input;
         }
@@ -280,7 +281,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             if (!m_PreviouslyGrounded && m_IsGrounded && m_Jumping)
             {
-            	Debug.Log("Done Jumping");
                 m_Jumping = false;
             }
         }

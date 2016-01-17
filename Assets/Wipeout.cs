@@ -3,7 +3,7 @@ using System.Collections;
 using UnityStandardAssets.Characters.FirstPerson;
 
 public class Wipeout : MonoBehaviour {
-	public float duration = 3.0F;
+	public float duration = 2.0F;
 	// Use this for initialization
 	void Start () {
 	
