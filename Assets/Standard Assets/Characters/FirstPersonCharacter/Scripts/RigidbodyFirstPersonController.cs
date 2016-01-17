@@ -214,7 +214,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     x = CrossPlatformInputManager.GetAxis("Horizontal"),
 					y = Mathf.Clamp( Mathf.Cos (  Mathf.Deg2Rad * (cam.transform.rotation.eulerAngles.y)), 0.0F, 1.0F )
                 };
-			Debug.Log (Mathf.Clamp( Mathf.Cos (Mathf.Deg2Rad * (cam.transform.rotation.eulerAngles.y )), 0.0F, 1.0F ));
+//			Debug.Log (Mathf.Clamp( Mathf.Cos (Mathf.Deg2Rad * (cam.transform.rotation.eulerAngles.y )), 0.0F, 1.0F ));
 			movementSettings.UpdateDesiredTargetSpeed(input);
             return input;
         }

@@ -13,6 +13,9 @@ public class Hill : MonoBehaviour {
 	public int rows = 5;
 	public int columns = 5;
 	
+	// Objects to place
+	public GameObject[] obstacles;
+	
 	// Use this for initialization
 	void Start () {
 		GameObject floorParent = new GameObject();
@@ -23,7 +26,11 @@ public class Hill : MonoBehaviour {
 				GameObject o = Instantiate( floor, new Vector3(x * floorWidth, 0.0F, y * floorHeight), floor.transform.rotation) as GameObject;
 				o.transform.localScale = new Vector3(floorWidth, floorHeight, 1.0F);
 				o.transform.parent = floorParent.transform;
-
+				
+				if( obstacles.Length > 0 ){
+					GameObject obs = Instantiate ( obstacles[0] , new Vector3(x * floorWidth, 0.0F, y * floorHeight), obstacles[0].transform.rotation) as GameObject;
+					obs.transform.parent = floorParent.transform;
+				} 
 			}
 
 		}
