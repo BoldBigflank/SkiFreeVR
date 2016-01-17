@@ -133,6 +133,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 m_Jump = true;
             }
         }
+        
+        public void Jump(float jumpForce){
+        	movementSettings.JumpForce = jumpForce * m_RigidBody.velocity.magnitude ;
+        	m_Jump = true;
+        }
 
 
         private void FixedUpdate()
