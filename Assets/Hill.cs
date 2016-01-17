@@ -77,9 +77,7 @@ public class Hill : MonoBehaviour {
 			gate.transform.localRotation = Quaternion.Euler (Vector3.left * floorAngle);
 			
 			xPos += Random.Range (-floorWidth, floorWidth);
-			Debug.Log (y);
 			if(y == rows - 1){
-			Debug.Log("This is the last one");
 				gate.GetComponent<SlalomGate>().SetLast(true);
 			}
 		}

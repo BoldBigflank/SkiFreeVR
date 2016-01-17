@@ -13,7 +13,6 @@ public class SlalomGate : MonoBehaviour {
 	}
 	
 	public void SetLast(bool l){
-		Debug.Log ("this is set to be the last one");
 		last = l;
 	}
 	
