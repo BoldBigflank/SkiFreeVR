@@ -147,7 +147,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
         
         IEnumerator StopMoving(float duration){
-        	float oldSpeed = 0.0F;
         	if(!movementSettings.wipedOut){
 				Debug.Log ("Stopping" + movementSettings.ForwardSpeed);
         		movementSettings.wipedOut = true;

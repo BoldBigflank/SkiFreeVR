@@ -17,8 +17,13 @@ public class Hill : MonoBehaviour {
 	public GameObject[] obstacles;
 	public int obstacleCount = 25;
 	
+	// Slalom
+	public GameObject leftGate;
+	public GameObject rightGate;
+	
 	// Use this for initialization
 	void Start () {
+		// The floor
 		GameObject floorParent = new GameObject();
 		floorParent.name = "Floor";
 		floorParent.transform.parent = transform;
@@ -35,6 +40,8 @@ public class Hill : MonoBehaviour {
 			}
 
 		}
+		
+		// The obstacles
 		GameObject obstaclesParent = new GameObject();
 		obstaclesParent.name = "Obstacles";
 		obstaclesParent.transform.parent = transform;
@@ -48,8 +55,34 @@ public class Hill : MonoBehaviour {
 			obs.transform.localRotation = Quaternion.Euler (Vector3.left * floorAngle);
 			
 		}
+		// The slalom
+		SetupSlalom();
+		
 		transform.position = new Vector3(columns * floorWidth/-2.0F , 0.0F, 0.0F);
 		transform.rotation = Quaternion.Euler (Vector3.left * (-1)*floorAngle);
+		
+	}
+	
+	void SetupSlalom(){
+		GameObject slalomParent = new GameObject();
+		slalomParent.name = "Slalom";
+		slalomParent.transform.parent = transform;
+		
+		float xPos = columns * floorWidth / 2.0F;
+		
+		for(int y = 2; y < rows; y++){
+			GameObject nextGate = (y % 2 == 0) ? leftGate : rightGate;
+			GameObject gate = Instantiate( nextGate, new Vector3(xPos, 0.0F, y * floorHeight), nextGate.transform.rotation) as GameObject;
+			gate.transform.parent = slalomParent.transform;
+			gate.transform.localRotation = Quaternion.Euler (Vector3.left * floorAngle);
+			
+			xPos += Random.Range (-floorWidth, floorWidth);
+			Debug.Log (y);
+			if(y == rows - 1){
+			Debug.Log("This is the last one");
+				gate.GetComponent<SlalomGate>().SetLast(true);
+			}
+		}
 	}
 	
 	// Update is called once per frame
